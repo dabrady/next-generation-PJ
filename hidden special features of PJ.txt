@@ -12,8 +12,8 @@ Hidden / Special Features of PJ (as desired by Silent Wolf)
   -knows INDIFFERENCE (super effective against all types), low PP
   -knows TAKE (deals a small amount of damage of a random type, and restores a random stat (including the PP of its moves) to the same degree), high PP
   
-* Alternate ("Simple") graphics mode (secret)
-  -a game mode in which all sprites are replaced by hand-drawn versions of themselves
+* Alternate ("HD") graphics mode (secret)
+  -a game mode in which all sprites are replaced by hand-drawn (HD) versions of themselves
   
 * Choose your own theme music (unlockable)
   -customize the themes that play on the home screen, overworld, and battle screen
@@ -22,7 +22,7 @@ Hidden / Special Features of PJ (as desired by Silent Wolf)
   
 * Alternate homescreen (secret)
   -choose between standard and ASCII art version
-  -if found before Simple mode, only alt. homescreen is unlocked; if Simple mode found first, both are unlocked and alt. homescreen item can no longer be found
+  -if found before HD mode, only alt. homescreen is unlocked; if HD mode found first, both are unlocked and alt. homescreen item can no longer be found
   
 * Injured trainer sprites (special feature)
   -as a Trainer battle progresses, the sprites of each Trainer reflect injuries or increasingly worried expressions
