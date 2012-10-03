@@ -6,7 +6,7 @@ a reboot of original-PJ, the most current stage in development
 Current Collaborators: 
     Silent Wolf (co-founder)
     the Admiral (co-founder)
-    Sir Waggon (advisor)
+    Sir Waggon (senior advisor)
 ~~~
 
 
