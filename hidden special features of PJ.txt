@@ -1,0 +1,33 @@
+Hidden / Special Features of PJ (as desired by Silent Wolf)
+---------------------------------------------------------
+(unlockable) -> achieve something through game play to unlock
+(secret) -> find it (probably in the form of an item) hidden in the game
+(special feature) -> misleading; really just a cool standard feature
+(easter egg) -> hidden somewhere in a menu
+
+* Honey Badger pokemon (unlockable)
+  -very high HP
+  -resistant to all types except POISON (normal damage)
+                                -if poisoned, damage is dealt, then HB is put to sleep for one turn (awakens poison-free)
+  -knows INDIFFERENCE (super effective against all types), low PP
+  -knows TAKE (deals a small amount of damage of a random type, and restores a random stat (including the PP of its moves) to the same degree), high PP
+  
+* Alternate ("Simple") graphics mode (secret)
+  -a game mode in which all sprites are replaced by hand-drawn versions of themselves
+  
+* Choose your own theme music (unlockable)
+  -customize the themes that play on the home screen, overworld, and battle screen
+  -choose from a list or upload your own mp3
+  -unlocked after earning your first Gym Badge or winning your first Trainer Battle or something
+  
+* Alternate homescreen (secret)
+  -choose between standard and ASCII art version
+  -if found before Simple mode, only alt. homescreen is unlocked; if Simple mode found first, both are unlocked and alt. homescreen item can no longer be found
+  
+* Injured trainer sprites (special feature)
+  -as a Trainer battle progresses, the sprites of each Trainer reflect injuries or increasingly worried expressions
+  -a modified sprite will appear as Pokemon (on the same team) faint (e.g. once two have fainted, once four have fainted, and once five have fainted)
+  -the initial sprite will show the Trainer in their natural state
+  
+* Something (easter egg)
+  -does something
