@@ -294,7 +294,8 @@ class PFrame extends JFrame implements Serializable{
     button = home.exit;
 	button.addActionListener(new ActionListener(){
 	    public void actionPerformed(ActionEvent e){
-          System.exit(0);
+		  if (myInstance.confirmQuit() == 0)
+            System.exit(0);
         }//end actionPerformed(ActionEvent)
 	  }//end ActionListener()
 	);//end addActionListener()
