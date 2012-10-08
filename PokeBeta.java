@@ -13,6 +13,9 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.*;
 
+
+//PFrame follows the Singleton design, meaning it restricts access to its constructor to ensure only one instance of PFrame can be created at a time.
+//To create a second PFrame, the first must be destroyed, otherwise calling the getInstance() method will return the existing PFrame.
 class PFrame extends JFrame implements Serializable{
   private static final long serialVersionUID = -4840769033005188509L;
   private static PFrame myInstance; //an instance of itself, used to restrict the number of instances of a PFrame to a single shared instance among all components
@@ -132,9 +135,9 @@ class PFrame extends JFrame implements Serializable{
     if (myInstance.home.isVisible()){
 	  menuBar.setVisible(false);
 	}else if (myInstance.ow.isVisible()){
-	  menuBar.remove(3); //remove Run (or Quit) and replace with Quit
-	  menu = new JMenu("Quit");
-	  menu.setMnemonic(KeyEvent.VK_Q);
+	  menuBar.remove(3); //remove Run (or Home) and replace with Home
+	  menu = new JMenu("Home");
+	  menu.setMnemonic(KeyEvent.VK_H);
 	  menu.addMouseListener(new MouseAdapter(){
 	      public void mouseClicked(MouseEvent e){
 		    if (myInstance.confirmQuit() == 0){
@@ -151,7 +154,7 @@ class PFrame extends JFrame implements Serializable{
 	  menuBar.revalidate(); //refresh menubar to display changes
 	  menuBar.setVisible(true);
 	}else if (myInstance.battle.isVisible()){
-	  menuBar.remove(3); //remove Quit and replace with Run
+	  menuBar.remove(3); //remove Home and replace with Run
 	  menu = new JMenu("Run");
 	  menu.setMnemonic(KeyEvent.VK_R);
 	  menu.addMouseListener(new MouseAdapter(){
@@ -234,24 +237,28 @@ class PFrame extends JFrame implements Serializable{
 	  }//end MouseAdapter()
 	);//end addMouseListener()
 	
-	menu = menuBar.getMenu(3); //quit menu
-	if (battle.isVisible()){
+	menu = menuBar.getMenu(3); //home / run menu
+	if (battle.isVisible()){ //run menu
       menu.addMouseListener(new MouseAdapter(){
 	      public void mouseClicked(MouseEvent e){
-  		    battle.setVisible(false);
-		    myInstance.setContentPane(ow);
-		    ow.setVisible(true);
-		    PFrame.updateMenuBar();
+            if (myInstance.confirmRun() == 0){
+  		      battle.setVisible(false);
+		      myInstance.setContentPane(ow);
+		      ow.setVisible(true);
+		      PFrame.updateMenuBar();
+			}//end if-else block
 		  }//end m	ouseClicked()
 		}//end MouseAdapter()
 	  );//end addMouseListener()
-	}else{ //run menu
+	}else{ //home menu
 	  menu.addMouseListener(new MouseAdapter(){
 	      public void mouseClicked(MouseEvent e){
-  		    myInstance.ow.setVisible(false);
-		    myInstance.setContentPane(myInstance.home);
-		    myInstance.home.setVisible(true);
-		    PFrame.updateMenuBar();
+		    if (myInstance.confirmQuit() == 0){
+  		      myInstance.ow.setVisible(false);
+		      myInstance.setContentPane(myInstance.home);
+		      myInstance.home.setVisible(true);
+		      PFrame.updateMenuBar();
+			}//end if-else block
 		  }//end mouseClicked()
 		}//end MouseAdapter()
 	  );//end addMouseListener()
@@ -274,9 +281,21 @@ class PFrame extends JFrame implements Serializable{
 	button = home.load;
 	button.addActionListener(new ActionListener(){
 	    public void actionPerformed(ActionEvent e){
-		  myInstance.load();
-		  System.out.println("I'm loaded!");
+		  if ((new File("save.ser")).exists()){
+		    myInstance.load();
+		    System.out.println("I'm loaded!");
+	      }else{
+		    JOptionPane.showMessageDialog(myInstance, "No save found.", "Nice try.", JOptionPane.ERROR_MESSAGE);
+		  }//end if-else block
 		}//end actionPerformed()
+	  }//end ActionListener()
+	);//end addActionListener()
+	
+    button = home.exit;
+	button.addActionListener(new ActionListener(){
+	    public void actionPerformed(ActionEvent e){
+          System.exit(0);
+        }//end actionPerformed(ActionEvent)
 	  }//end ActionListener()
 	);//end addActionListener()
 	
@@ -329,7 +348,7 @@ class HomeScreen extends ImagePanel implements Serializable{
   private static final long serialVersionUID = -8143264756541624637L;
   public PFrame parent;
   public JPanel contentPane;
-  public JButton start, load;
+  public JButton start, load, exit;
   
   public HomeScreen(PFrame parent, String url){
     super(url);
@@ -357,9 +376,13 @@ class HomeScreen extends ImagePanel implements Serializable{
 	load = new JButton("CONTINUE");
 	load.setPreferredSize(new Dimension(100, 50));
 	
+	exit = new JButton("EXIT");
+	exit.setPreferredSize(new Dimension(75, 50));
+	
 	this.contentPane.add(Box.createRigidArea(new Dimension(350, 600))); //offsets our button
 	this.contentPane.add(start);
 	this.contentPane.add(load);
+	this.contentPane.add(exit);
   }//end HomeScreen(PFrame, String) constructor
   
   public JPanel getContentPane(){
