@@ -3,21 +3,39 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-import javax.imageio.ImageIO;
 
+class ScrollTest{
+  static JFrame frame;
 
-class ScrollPanel extends JPanel{
+  public static void main(String[] args) {
+    frame = new JFrame("Scroll Test");
+	frame.setLayout(new BorderLayout());
+	Toolkit kit = Toolkit.getDefaultToolkit();
+	Dimension screenSize = kit.getScreenSize();
+	int screenHeight = (int) 3 * screenSize.height / 4;
+	int screenWidth = (int) 3 * screenSize.width / 4;
+	frame.setSize(screenWidth, screenHeight);
+	frame.setDefaultCloseOperation(3);
+	ScrollPanel panel = new ScrollPanel();
+	panel.setBackground(Color.BLACK);
+	panel.setFocusable(true);
+	frame.add(panel, BorderLayout.CENTER);
+	frame.setVisible(true);
+  }
+}
+
+class ScrollPanel extends JPanel implements KeyListener, ComponentListener{
   Map map;
   Map house;
   Map meadow;
-  BufferedImage player;
-  BufferedImage playerBack;
-  BufferedImage playerLeft;
-  BufferedImage playerLeft2;
-  BufferedImage playerLeft3;
-  BufferedImage playerRight;
-  BufferedImage exclamation;
-  BufferedImage image;
+  Image player = Toolkit.getDefaultToolkit().getImage(getClass().getResource("character.png"));
+  Image playerBack = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterback.png"));
+  Image playerLeft = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft.png"));
+  Image playerLeft2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft2.png"));
+  Image playerLeft3 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft3.png"));
+  Image playerRight = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterright.png"));
+  Image exclamation = Toolkit.getDefaultToolkit().getImage(getClass().getResource("exclamation.png"));
+  Image image = player;
   Point[][] points;
   Point playerPosition;
   int universalI = 0;
@@ -50,19 +68,9 @@ class ScrollPanel extends JPanel{
 	meadow = new Map(1);
 	house = new Map(2);
 	map = meadow;
+	addKeyListener(this);
 	points = new Point[11][9];
-	try{
-		player = Toolkit.getDefaultToolkit().getImage(getClass().getResource("character.png"));
-		playerBack = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterback.png"));
-		playerLeft = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft.png"));
-		playerLeft2 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft2.png"));
-		playerLeft3 = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterleft3.png"));
-		playerRight = Toolkit.getDefaultToolkit().getImage(getClass().getResource("characterright.png"));
-		exclamation = Toolkit.getDefaultToolkit().getImage(getClass().getResource("exclamation.png"));
-		image = player;
-	}catch(IOException e){
-	  System.out.println(e);
-	}
+	addComponentListener(this);
 	this.t = new javax.swing.Timer(10, new ActionListener() {
     public void actionPerformed(ActionEvent e) {
 	  if (d) {
@@ -164,28 +172,28 @@ class ScrollPanel extends JPanel{
 	else {
     if (key.getKeyCode() == key.VK_DOWN) {
       image = player;
-      if (map.tiles[universalI + 5][universalJ + 5].walkable != false) {
+      if (map.tiles[universalI + 5][universalJ + 5].walkable) {
 		  d = true;
 		  t.start();
 	  }
 	}
 	else if (key.getKeyCode() == key.VK_UP) {
       image = playerBack;
-      if (map.tiles[universalI + 5][universalJ + 3].walkable != false) {
+      if (map.tiles[universalI + 5][universalJ + 3].walkable) {
 		u = true;
 	    t.start();
 	  }
 	}
 	else if (key.getKeyCode() == key.VK_RIGHT) {
       image = playerRight;
-      if (map.tiles[universalI + 6][universalJ + 4].walkable != false) {
+      if (map.tiles[universalI + 6][universalJ + 4].walkable) {
 		r = true;
 	    t.start();
 	  }
 	}
 	else if (key.getKeyCode() == key.VK_LEFT){
       image = playerLeft;
-      if (map.tiles[universalI + 4][universalJ + 4].walkable != false) {
+      if (map.tiles[universalI + 4][universalJ + 4].walkable) {
 		l = true;
 		t.start();
 	  }
@@ -283,15 +291,15 @@ class Point{
 }
 
 class Tile{
-  BufferedImage image;
+  Image image;
   boolean walkable;
   
-  Tile(BufferedImage image, boolean walkable) {
+  Tile(Image image, boolean walkable) {
 	this.image = image;
 	this.walkable = walkable;
   }
   
-  BufferedImage getImage(){
+  Image getImage(){
     return this.image;
   }
 }
@@ -299,40 +307,34 @@ class Tile{
 class Map{
   String name;
   Tile[][] tiles;
-  Tile gary;
-  Tile gary2;
-  Tile grass;
+  Tile gary = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("character2.png")), false);
+  Tile gary2 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("character2back.png")), false);
+  Tile grass = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("grass.png")), true);
   
   Map(String name, Tile[][] tiles) {
     this.name = name;
-	this.tiles = tiles;
-	try{
-		this.gary = new Tile(ImageIO.read(new File("character2.png")), false);
-		this.gary2 = new Tile(ImageIO.read(new File("character2back.png")), false);
-		this.grass = new Tile(ImageIO.read(new File("grass.png")), true);
-	}catch(IOException e){
-		System.out.println(e);
-	}
+    this.tiles = tiles;
   }
   
   Map(int n) {
     this.name = "Map Demo";
-	try{
-	Tile water = new Tile(ImageIO.read(new File("water.png")), false);
-	Tile tree = new Tile(ImageIO.read(new File("tree.png")), false);
-	Tile rock = new Tile(ImageIO.read(new File("rock.png")), false);
-	Tile tall = new Tile(ImageIO.read(new File("tall.png")), true);
-	Tile pc1 = new Tile(ImageIO.read(new File("pc1.png")), false);
-	Tile pc2 = new Tile(ImageIO.read(new File("pc2.png")), true);
-	Tile pc3 = new Tile(ImageIO.read(new File("pc3.png")), false);
-	Tile pc4 = new Tile(ImageIO.read(new File("pc4.png")), false);
-	Tile pc5 = new Tile(ImageIO.read(new File("pc5.png")), false);
-	Tile floor = new Tile(ImageIO.read(new File("tile.png")), true);
-	Tile wall = new Tile(ImageIO.read(new File("wall.png")), false);
-	Tile black = new Tile(ImageIO.read(new File("black.png")), false);
-	}catch(IOException e){
-		System.out.println(e);
-	}
+	// Tile dirt = new Tile(new Color(205, 175, 149), true);
+	// Tile tallGrass = new Tile(new Color(46, 139, 87), true);
+	// Tile water = new Tile(Color.BLUE, false);
+	// Tile grass = new Tile(new Color(152, 251, 152), true);
+	// Tile black = new Tile(Color.BLACK, false);
+	Tile water = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("water.png")), false);
+	Tile tree = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("tree.png")), false);
+	Tile rock = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("rock.png")), false);
+	Tile tall = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("tall.png")), true);
+	Tile pc1 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("pc1.png")), false);
+	Tile pc2 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("pc2.png")), true);
+	Tile pc3 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("pc3.png")), false);
+	Tile pc4 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("pc4.png")), false);
+	Tile pc5 = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("pc5.png")), false);
+	Tile floor = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("tile.png")), true);
+	Tile wall = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("wall.png")), false);
+	Tile black = new Tile(Toolkit.getDefaultToolkit().getImage(getClass().getResource("black.png")), false);
     if (n == 1) {
 	Tile[][] tiles = new Tile[30][30];
     //sets grass
@@ -433,9 +435,15 @@ class Map{
 		  tiles[i][j] = black;
 		}
 	  }
+
+	  for (int i = 0; i < 15; i++){
+	      for (int j = 0; j < 2; j++){
+		  tiles[i][j] = black;
+	      }
+	  }
 	  
-	  for(int i = 5; i <15; i++) {
-	    for (int j = 0; j < 4; j++) {
+	  for(int i = 5; i < 15; i++) {
+	    for (int j = 2; j < 4; j++) {
 		  tiles[i][j] = wall;
 		}
 	  }
